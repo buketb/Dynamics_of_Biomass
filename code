@@ -1,0 +1,61 @@
+
+
+# 1st Code:
+
+#Population dynamics parameters  
+r = 0.9
+K= 10
+R = 1+r
+MVP=K/5
+
+k=R*K/(R-1)
+
+
+logistic = function(t,B){
+  y=(R*B)*(1-B/k) 
+return(y)
+}
+
+ricker = function(t,B){
+y=B*exp(r*(1-B/K))
+return(y)
+}
+
+b=(R-1)/K
+
+beverton= function(t,B){
+y=(R*B)/(1 + b*B) 
+return(y)
+}
+
+depensation=function(t, B){
+y= B + (beverton(t,B)-B)*(B-MVP)
+#y=(B+(beverton(R,b,B)-B)*(B-MVP)/MVP)
+return(y)
+}
+
+#Dynamics
+
+B = seq(0, 2*K, length.out = 1000)
+
+plot(B,logistic(0,B), ylim =c(0,20),col = 'red',lwd =2, lty=1, type= 'l')
+lines(B, ricker(0,B), col = 'cyan' ,lwd =2)
+lines(B, beverton(0,B),col = 'blue',lwd = 2)
+lines(B, depensation(0,B), col = 'green',lwd =2)
+lines(B,B, col = 'black',lwd =2)
+
+#to identify the curves
+B = seq(0, 2*K, length.out = 30)
+
+plot(B,logistic(0,B), ylim =c(0,20),col = 'red',lwd =2, lty=1,type= "p", pch =0,
+     main= "Biomass Dynamics", xlab = "Biomass B(t)", ylab = "Biomass B(t+1)", cex.lab= 0.8)
+points(B, ricker(0,B), col = 'cyan' ,lwd =2, pch = 1, type = 'p')
+points(B, beverton(0,B),col = 'blue',lwd = 2, type = 'p', pch=2)
+points(B, depensation(0,B), col = 'green',lwd =2, type= "p", pch=3)
+points(B,B, col = 'black',lwd =2, type= "p", pch=4)
+legend(-0.5,20,legend=c("Logistic","Ricker","Beverton", "Depensation","Identity"), 
+       col=c("red", "cyan", "blue", "green", "black"),
+       pch = c(0:4), lwd = 2, cex = 0.7, lty=NA, box.lty=3)
+       
+       
+       
